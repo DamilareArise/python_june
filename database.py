@@ -39,6 +39,9 @@ mycon.autocommit = True
 # mycursor.execute(query,values)
 # mycon.commit()
 
+
+# mycursor.execute('CREATE TABLE exam_informations(id INT PRIMARY KEY AUTO_INCREMENT, questions VARCHAR(300), answers VARCHAR(10), course_code VARCHAR(20), admin_name VARCHAR(30))')
+
 def home():
     user = input("""
         Welcome to the School Management System
@@ -133,13 +136,26 @@ def login():
         login()
 
 def adminLogin(details):
-    print(f'''
-        Welcome {details[1]}
+    admin_name = details[1]
+    user = input(f'''
+        Welcome {admin_name}
 
     1. Set Test Questions
     2. View Test Questions
     #. Exit
-    ''')
+    :- ''')
+    if user == '1':
+        setQuestion(admin_name, details)
+    elif user == '2':
+        viewQuestion(details)
+    elif user == '#':
+        exit()
+    else:
+        print('Invalid Input')
+        adminLogin(details)
+
+
+
 
 def studentLogin(details):
     print(f'''
@@ -150,9 +166,42 @@ def studentLogin(details):
     #. Exit
     ''')
 
+def setQuestion(admin, details):
+    print('Set Question')
+    course_code = input('Course code: ')
+    while True:
+        question = input('Question & Options: ').strip()
+        answer = input('Answer: ').strip().lower()
+        if question and answer:
+            query = 'INSERT INTO exam_informations (questions, answers, course_code, admin_name) VALUES (%s,%s,%s,%s)'
+            values = (question, answer, course_code, admin)
+            mycursor.execute(query, values)
+
+        user = input('Press ENTER to continue or 1 to stop: ')
+        if user == '1':
+            break
+
+    adminLogin(details)
+
+def viewQuestion(details):
+    name = details[1]
+    print('View Question')
+    course_code = input('Course code: ')
+    query = 'SELECT * FROM exam_informations WHERE course_code = %s AND admin_name= %s'
+    values = (course_code, name)
+    mycursor.execute(query, values)
+    result = mycursor.fetchall()
+    if result:
+        for i in result:
+            print(f'Question {i[0]}. {i[1]}\nAnswer => {i[2]}')
 
 
-home()
+    else:
+        print('No Question Found')
+
+    adminLogin(details)
+
+# home()
 
 
 # SELECT QUERY
@@ -160,3 +209,16 @@ home()
 # mycursor.execute('SELECT * FROM user_table WHERE id = 2')
 # details = mycursor.fetchone()
 # print(details)
+
+# update query
+password = inputPassword()
+
+query = ('UPDATE user_table SET password=%s WHERE id=1')
+values = (password,)
+mycursor.execute(query, values)
+print('Password updated successfully')
+
+# Delete
+query = 'DELETE FROM user_table WHERE id = 1'
+mycursor.execute(query)
+
