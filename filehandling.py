@@ -53,6 +53,22 @@ import csv
 # print(president_name)
 # print(all_scores)
 
+# gradeA = open('Grade_A.csv', mode='x')
+# gradeB = open('Grade_B.csv', mode='x')
+
+# with open('student_grades.csv') as file:
+#     reader = csv.DictReader(file)
+#     for row in reader:
+#         # print(row['Name'], row['Score'] )
+#         if row['Grade'] == 'A':
+#             with open('Grade_A.csv', 'a', newline='') as file2:
+#                writer = csv.writer(file2)
+#                writer.writerow([row['Name'], row['Score'], row['Grade']])
+#         elif row['Grade'] == 'B':
+#             with open('Grade_B.csv', 'a', newline='') as file2:
+#                writer = csv.writer(file2)
+#                writer.writerow([row['Name'], row['Score'], row['Grade']])
+
 
 import os
 # os.rename('usPresident.csv', 'president_height.csv')
@@ -73,4 +89,4 @@ import os
 #     print(file)
 
 
-print(os.getcwd()) #current working directory
+# print(os.getcwd()) #current working directory
